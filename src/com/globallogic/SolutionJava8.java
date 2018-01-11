@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class SolutionJava8 {
@@ -25,23 +26,24 @@ public class SolutionJava8 {
         Collections.sort(people, Comparator.comparing(Person::getLastName).thenComparing(Person::getFirstName));
 
         System.out.println("Printing all persons");
-        printConditionally(people, p -> true);
+        performConditionally(people, p -> true, p-> System.out.println(p));
 
         System.out.println("");
         System.out.println("Printing all persons with the last name beginning with C");
-        printConditionally(people, p -> p.getLastName().startsWith("C"));
+        performConditionally(people, p -> p.getLastName().startsWith("C"), p-> System.out.println(p));
 
         System.out.println("");
         System.out.println("Printing all persons with the first name beginning with C");
-        printConditionally(people, p -> p.getFirstName().startsWith("C"));
+        // prints only first name
+        performConditionally(people, p -> p.getFirstName().startsWith("C"), p-> System.out.println(p.getFirstName()));
 
     }
 
     // using java.util.function - predicate
-    private static void printConditionally(List<Person> people, Predicate<Person> predicate) {
+    private static void performConditionally(List<Person> people, Predicate<Person> predicate, Consumer<Person> consumer) {
         for (Person p : people) {
             if (predicate.test(p)){
-                System.out.println(p);
+                consumer.accept(p);
             }
         }
     }
